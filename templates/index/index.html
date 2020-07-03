@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} Welcome {% endblock %}
+{% block content %}
+<!-- Showcase -->
+  <section id="showcase">
+    <div class="container text-center">
+      <div class="home-search p-5">
+        <div class="overlay p-5">
+          {% include 'partials/alerts.html' %}
+          <h1 class="display-4 mb-4">
+            Find Your New Home
+          </h1>
+          <p class="lead">Search Properties For Sale and To Rent in Faisalabad</p>
+           <div class="search">
+            <form action="{% url 'search' %}">
+              <!-- Form Row 1 -->
+              <div class="form-row">
+                 <div class="col-md-6 mb-3">
+                  <label class="sr-only">City</label>
+                  <select name="city" class="form-control">
+                    <option selected="true" disabled="disabled">Faisalabad</option>
+                    <option value="Faisalabad">Faisalabad</option>
+                  </select>
+                </div>
+                 <div class="col-md-6 mb-3">
+                  <label class="sr-only">For Sale or For Rent</label>
+                  <select name="sale_or_rent" class="form-control">
+                    <option selected="true" disabled="disabled">For Sale or For Rent</option>
+                    {% for key,value in rent_sale_choices.items %}
+                      <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                 <div class="col-md-6 mb-3">
+                  <label class="sr-only">Marla</label>
+                  <select name="lot_size" class="form-control">
+                    <option selected="true" disabled="disabled">Marla</option>
+                    {% for key,value in lot_size_choices.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                 <div class="col-md-6 mb-3">
+                  <label class="sr-only">House</label>
+                  <select name="house" class="form-control">
+                    <option selected="true" disabled="disabled">Residential</option>
+                    {% for key,value in residential_choices.items %}
+                      <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+                    <option value="Commercial" disabled="disabled">Commercial</option>
+                    {% for key,value in commercial_choices.items %}
+                      <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
+
+                  </select>
+                </div>
+
+
+              <button class="btn btn-secondary btn-block mt-4" type="submit">Submit Form</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Alerts -->
+<!--{% include 'partials/alerts.html' %}-->
+  <!-- Listings -->
+  <section id="listings" class="py-5">
+    <div class="container">
+      <h3 class="text-center mb-3">Latest Properties</h3>
+      <div class="row">
+        {% if listings %}
+        {% for listing in listings %}
+          <div class="col-md-6 col-lg-4 mb-4">
+           <div class="card listing-preview">
+            <img class="card-img-top" src="{{ listing.photo_main.url }}" alt="">
+            <div class="card-img-overlay">
+              <h2>
+                <span class="badge badge-secondary text-white">{{ listing.sale_or_rent }}</span>
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="listing-heading text-center">
+                <h4 class="text-primary">{{ listing.title }}</h4>
+                <p>
+                  <i class="fas fa-map-marker text-secondary"></i> {{ listing.location }}</p>
+              </div>
+              <hr>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-th-large"></i> Sqft: {{ listing.sdft }}</div>
+                <div class="col-6">
+                  <i class="fas fa-car"></i> Garage: {{ listing.garage }}</div>
+              </div>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-bed"></i> Bedrooms: {{ listing.bedrooms }}</div>
+                <div class="col-6">
+                  <i class="fas fa-bath"></i> Bathrooms: {{ listing.bathrooms }}</div>
+              </div>
+              <hr>
+              <div class="row py-2 text-secondary">
+                <div class="col-6">
+                  <i class="fas fa-user"></i> {{ listing.realtor }}</div>
+
+              </div>
+
+              <div class="row text-secondary pb-2">
+                <div class="col-6">
+                  <i class="fas fa-clock"></i> {{ listing.property_date | timesince }}</div>
+              </div>
+              <hr>
+              <a href="{% url 'property' listing.id %}" class="btn btn-primary btn-block">More Info</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+
+            <h1>No Available</h1>
+
+        {% endif  %}
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="py-5 bg-secondary text-white">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-4">
+          <i class="fas fa-comment fa-4x mr-4"></i>
+          <hr>
+          <h3>Consulting Services</h3>
+          <p>The first step is to find out when, where and how you need to invest using our time tested advisory.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-home fa-4x mr-4"></i>
+          <hr>
+          <h3>Propery Management</h3>
+          <p>We accommodate an extensive range of property management services to developers, landlords, and investors. We aspire to handle day to day requirements of your property efficiently.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-suitcase fa-4x mr-4"></i>
+          <hr>
+          <h3>Renting & Selling</h3>
+          <p>We are providing   you the best range of Renting Property Services, Selling Property Services, Buying Property Services, Property Valuation Services and Construction Services with effective & timely delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
